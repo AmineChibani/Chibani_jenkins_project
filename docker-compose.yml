@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: mhdamine48/jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    container_name: jenkins
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - jenkins-network
+
+  app:
+    build: .
+    ports:
+    ports:
+      - "4000:4000"
+    container_name: express-app
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - jenkins
+    networks:
+      - jenkins-network
+
+networks:
+  jenkins-network:
+    driver: bridge
+
+volumes:
+  jenkins_home:
+    driver: local
