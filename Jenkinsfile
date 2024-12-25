@@ -1,47 +1,46 @@
 pipeline {
-    agent any
-
-    environment {
-        DOCKER_IMAGE = 'mhdamine48/express-app'
-        DOCKER_CREDENTIALS = 'dockerhub-credentials'
+    agent {
+        docker {
+            image 'node:16'
+            args '-p 3000:3000'
+        }
     }
-
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+    }
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
         stage('Install') {
             steps {
                 sh 'npm install'
             }
         }
-
         stage('Test') {
             steps {
                 sh 'npm test'
             }
         }
-
         stage('Build Docker') {
+            agent any
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}:${BUILD_NUMBER}")
-                }
+                sh 'docker build -t mhdamine48/express-app .'
             }
         }
-
         stage('Push Docker') {
+            agent any
             steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS) {
-                        docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}").push()
-                        docker.image("${DOCKER_IMAGE}:${BUILD_NUMBER}").push('latest')
-                    }
-                }
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push mhdamine48/express-app'
             }
+        }
+    }
+    post {
+        always {
+            sh 'docker logout'
         }
     }
 }
