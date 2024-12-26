@@ -1,23 +1,23 @@
-# Express App with Jenkins CI/CD
+# 🚀 Express App with Jenkins CI/CD
 
 This project demonstrates a complete CI/CD pipeline using Jenkins, Docker, and Express.js.
 
-## Features
+## 📋 Features
 
-- Automated testing
-- Docker containerization
-- Continuous Integration with Jenkins
-- Automated deployment
-- Health monitoring endpoint
+- 🧪 Automated testing
+- 🐳 Docker containerization
+- 🔷 Continuous Integration with Jenkins
+- 🚀 Automated deployment
+- 🏥 Health monitoring endpoint
 
-## Prerequisites
+## 📋 Prerequisites
 
-- Node.js
-- Docker
-- Jenkins
-- Docker Hub account
+- 🟢 Node.js
+- 🐳 Docker
+- 🔷 Jenkins
+- 📊 Docker Hub account
 
-## Local Development
+## 🚀 Local Development
 
 1. Install dependencies:
    ```bash
@@ -34,7 +34,7 @@ This project demonstrates a complete CI/CD pipeline using Jenkins, Docker, and E
    npm start
    ```
 
-## Docker Commands
+## 🔄 Docker Commands
 
 Build the image:
 ```bash
@@ -46,12 +46,12 @@ Run the container:
 docker run -p 3000:3000 mhdamine48/express-app
 ```
 
-## API Endpoints
+## 🌐 API Endpoints
 
-- `GET /`: Returns a hello message
-- `GET /health`: Returns application health status
+- 🔗 **GET** `/`: Returns a hello message
+- 🔗 **GET** `/health`: Returns application health status
 
-## CI/CD Pipeline
+## 🔄 CI/CD Pipeline
 
 The Jenkins pipeline includes:
 1. Running tests
@@ -59,6 +59,6 @@ The Jenkins pipeline includes:
 3. Pushing to Docker Hub
 4. Deploying the application
 
-## Monitoring
+## 🏥 Monitoring
 
 Access the health endpoint at: `http://localhost:3000/health`
