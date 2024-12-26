@@ -7,12 +7,13 @@ pipeline {
         DOCKER_IMAGE = 'mhdamine48/express-app'
     }
     stages {
-
         stage('Install Dependencies') {
-
-
-        stage('Install Dependencies') {
-
+            steps {
+                sh '''
+                    npm install
+                '''
+            }
+        }
         stage('Security Scan') {
             steps {
                 sh '''
@@ -28,7 +29,6 @@ pipeline {
                     reuseNode true
                 }
             }
-
             steps {
                 sh '''
                     npm install
