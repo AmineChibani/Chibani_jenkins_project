@@ -1,9 +1,20 @@
 const request = require('supertest');
 const app = require('../app');
 
+let server;
+
 describe('Express App Tests', () => {
+    beforeAll(() => {
+        process.env.NODE_ENV = 'test';
+        server = app.listen(0); // Use random available port
+    });
+
+    afterAll((done) => {
+        server.close(done);
+    });
+
     test('GET / should return hello message', async () => {
-        const response = await request(app)
+        const response = await request(server)
             .get('/')
             .expect('Content-Type', /json/)
             .expect(200);
@@ -12,7 +23,7 @@ describe('Express App Tests', () => {
     });
 
     test('GET /health should return health status', async () => {
-        const response = await request(app)
+        const response = await request(server)
             .get('/health')
             .expect('Content-Type', /json/)
             .expect(200);
