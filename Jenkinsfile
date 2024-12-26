@@ -1,27 +1,22 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS = credentials('dockerhub-credentials')
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_IMAGE = 'mhdamine48/express-app'
+        DOCKER_CREDENTIALS = credentials('docker-credentials')
     }
     stages {
-        stage('Docker Build and Push') {
+        stage('Build and Push') {
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', 
-                                                    usernameVariable: 'DOCKER_USERNAME', 
-                                                    passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Build the image
-                        sh 'docker build -t mhdamine48/express-app .'
-                        
-                        // Login to Docker Hub
-                        sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-                        
-                        // Push the image
-                        sh 'docker push mhdamine48/express-app'
-                        
-                        // Logout
-                        sh 'docker logout'
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', 
+                                                    usernameVariable: 'DOCKER_CREDENTIALS_USR', 
+                                                    passwordVariable: 'DOCKER_CREDENTIALS_PSW')]) {
+                    sh '''
+                        docker build -t $DOCKER_IMAGE .
+                        echo $DOCKER_CREDENTIALS_PSW | docker login -u $DOCKER_CREDENTIALS_USR --password-stdin
+                        docker push $DOCKER_IMAGE
+                        docker logout
+                    '''
                 }
             }
         }
