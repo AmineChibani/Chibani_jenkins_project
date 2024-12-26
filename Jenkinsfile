@@ -24,12 +24,12 @@ pipeline {
             steps {
                 sh '''
                     npm install
-                    npm test
+                    JEST_JUNIT_OUTPUT_DIR=./reports JEST_JUNIT_OUTPUT_NAME=junit.xml npm test -- --ci --reporters=default --reporters=jest-junit
                 '''
             }
             post {
                 always {
-                    junit 'junit.xml'
+                    junit 'reports/junit.xml'
                 }
             }
         }

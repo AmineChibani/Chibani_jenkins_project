@@ -3,23 +3,14 @@ const app = express();
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'UP',
-        timestamp: new Date(),
-        uptime: process.uptime(),
-        version: '1.0.0',
-        environment: process.env.NODE_ENV || 'development'
+    res.json({ 
+        status: 'healthy',
+        timestamp: new Date().toISOString()
     });
 });
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello from  Jenkins Pipeline!' });
-
-    res.json({ 
-        message: 'Hello Jenkins Pipeline!',
-        environment: process.env.NODE_ENV || 'development',
-        timestamp: new Date()
-    });
+    res.json({ message: 'Hello Jenkins Pipeline!' });
 });
 
 const port = process.env.PORT || 3000;
