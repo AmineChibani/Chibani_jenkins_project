@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_REGISTRY = 'docker.io'
         DOCKER_IMAGE = 'mhdamine48/express-app'
+        APP_PORT = '3000'
     }
     stages {
         stage('Install Dependencies') {
@@ -48,15 +49,24 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    # Stop and remove existing containers
-                    docker ps -aq | xargs -r docker stop
-                    docker ps -aq | xargs -r docker rm
-                    
-                    # Remove existing app container if it exists
+                    # Remove the existing container if it exists
                     docker rm -f express-app || true
                     
+                    # Pull the latest image
+                    docker pull $DOCKER_IMAGE:latest
+                    
                     # Run the new container
-                    docker run -d --name express-app -p 3000:3000 $DOCKER_IMAGE:latest
+                    docker run -d \
+                        --name express-app \
+                        -p $APP_PORT:3000 \
+                        --restart unless-stopped \
+                        $DOCKER_IMAGE:latest
+                        
+                    # Wait for container to start
+                    sleep 10
+                    
+                    # Check if container is running
+                    docker ps | grep express-app || (echo "Container failed to start" && exit 1)
                 '''
             }
         }
@@ -67,6 +77,10 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed! Check the logs for details.'
+            sh '''
+                # Cleanup on failure
+                docker rm -f express-app || true
+            '''
         }
         always {
             sh 'docker logout || true'
