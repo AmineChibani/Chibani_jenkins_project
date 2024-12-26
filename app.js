@@ -13,12 +13,16 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello Jenkins Pipeline!' });
+    res.json({ 
+        message: 'Hello Jenkins Pipeline!',
+        environment: process.env.NODE_ENV || 'development',
+        timestamp: new Date()
+    });
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port} in ${process.env.NODE_ENV || 'development'} mode`);
 });
 
 module.exports = app;
