@@ -1,6 +1,8 @@
 pipeline {
     agent any
     environment {
+        DOCKER_CREDENTIALS = credentials('docker-credentials')
+        APP_NAME = 'express-app'
         DOCKER_REGISTRY = 'docker.io'
         DOCKER_IMAGE = 'mhdamine48/express-app'
     }
@@ -17,6 +19,11 @@ pipeline {
                 sh '''
                     npm test
                 '''
+            }
+            post {
+                always {
+                    junit 'junit.xml'
+                }
             }
         }
         stage('Build and Push') {
@@ -49,6 +56,7 @@ pipeline {
         }
         always {
             sh 'docker logout || true'
+            cleanWs()
         }
     }
 }
