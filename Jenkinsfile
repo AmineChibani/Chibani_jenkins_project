@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build and Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-creds', 
+                withCredentials([usernamePassword(credentialsId: 'docker-credentials', 
                                                     usernameVariable: 'USERNAME', 
                                                     passwordVariable: 'PASSWORD')]) {
                     sh '''
