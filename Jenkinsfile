@@ -6,6 +6,9 @@ pipeline {
         DOCKER_REGISTRY = 'mhdamine48'
     }
     stages {
+
+        stage('Install Dependencies') {
+
         stage('Security Scan') {
             steps {
                 sh '''
@@ -21,9 +24,16 @@ pipeline {
                     reuseNode true
                 }
             }
+
             steps {
                 sh '''
                     npm install
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                sh '''
                     npm test
                 '''
             }
