@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   jenkins:
-    image: mhdamine48/jenkins/jenkins:lts
+    image: mhdamine48/jenkins:lts
     privileged: true
     user: root
     ports:
@@ -18,8 +18,7 @@ services:
   app:
     build: .
     ports:
-    ports:
-      - "4000:4000"
+      - "3000:3000"
     container_name: express-app
     environment:
       - NODE_ENV=production
