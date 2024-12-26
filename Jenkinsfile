@@ -23,7 +23,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                    npm install
+                    mkdir -p reports
                     JEST_JUNIT_OUTPUT_DIR=./reports JEST_JUNIT_OUTPUT_NAME=junit.xml npm test -- --ci --reporters=default --reporters=jest-junit
                 '''
             }

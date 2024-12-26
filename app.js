@@ -4,8 +4,10 @@ const app = express();
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 
-        status: 'healthy',
-        timestamp: new Date().toISOString()
+        status: 'UP',
+        version: '1.0.0',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
     });
 });
 
