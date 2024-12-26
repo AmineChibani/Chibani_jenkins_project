@@ -48,15 +48,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    # Install Docker Compose v2
-                    DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-                    mkdir -p $DOCKER_CONFIG/cli-plugins
-                    curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
-                    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+                    # Stop and remove existing containers
+                    docker ps -aq | xargs -r docker stop
+                    docker ps -aq | xargs -r docker rm
                     
-                    # Deploy using Docker Compose
-                    docker compose down || true
-                    docker compose up -d
+                    # Remove existing app container if it exists
+                    docker rm -f express-app || true
+                    
+                    # Run the new container
+                    docker run -d --name express-app -p 3000:3000 $DOCKER_IMAGE:latest
                 '''
             }
         }
