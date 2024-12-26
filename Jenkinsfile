@@ -7,7 +7,28 @@ pipeline {
         DOCKER_IMAGE = 'mhdamine48/express-app'
     }
     stages {
+
         stage('Install Dependencies') {
+
+
+        stage('Install Dependencies') {
+
+        stage('Security Scan') {
+            steps {
+                sh '''
+                    npm audit
+                    npm audit fix --force || true
+                '''
+            }
+        }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+
             steps {
                 sh '''
                     npm install
