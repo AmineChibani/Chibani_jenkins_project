@@ -13,6 +13,8 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/', (req, res) => {
+  res.json({ message: 'Hello from  Jenkins Pipeline!' });
+=======
     res.json({ 
         message: 'Hello Jenkins Pipeline!',
         environment: process.env.NODE_ENV || 'development',
