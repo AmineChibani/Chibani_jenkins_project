@@ -1,8 +1,6 @@
 pipeline {
     agent any
     environment {
-        DOCKER_CREDENTIALS = credentials('docker-credentials')
-        APP_NAME = 'express-app'
         DOCKER_REGISTRY = 'docker.io'
         DOCKER_IMAGE = 'mhdamine48/express-app'
     }
@@ -23,21 +21,9 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    reuseNode true
-                }
-            }
             steps {
                 sh '''
                     npm install
-                '''
-            }
-        }
-        stage('Test') {
-            steps {
-                sh '''
                     npm test
                 '''
             }
